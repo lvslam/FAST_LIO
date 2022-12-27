@@ -21,7 +21,7 @@ Eigen::Matrix<T, 3, 3> Exp(const Eigen::Matrix<T, 3, 1> &&ang) {
     Eigen::Matrix<T, 3, 1> r_axis = ang / ang_norm;
     Eigen::Matrix<T, 3, 3> K;
     K << SKEW_SYM_MATRX(r_axis);
-    /// Roderigous Tranformation
+    /// Roderigo's Transformation
     return Eye3 + std::sin(ang_norm) * K + (1.0 - std::cos(ang_norm)) * K * K;
   }
   else {
@@ -42,7 +42,7 @@ Eigen::Matrix<T, 3, 3> Exp(const Eigen::Matrix<T, 3, 1> &ang_vel, const Ts &dt) 
 
     T r_ang = ang_vel_norm * dt;
 
-    /// Roderigous Tranformation
+    /// Roderigo's Transformation
     return Eye3 + std::sin(r_ang) * K + (1.0 - std::cos(r_ang)) * K * K;
   }
   else {
@@ -59,7 +59,7 @@ Eigen::Matrix<T, 3, 3> Exp(const T &v1, const T &v2, const T &v3) {
     Eigen::Matrix<T, 3, 3> K;
     K << SKEW_SYM_MATRX(r_ang);
 
-    /// Roderigous Tranformation
+    /// Roderigo's Transformation
     return Eye3 + std::sin(norm) * K + (1.0 - std::cos(norm)) * K * K;
   }
   else {
@@ -67,7 +67,7 @@ Eigen::Matrix<T, 3, 3> Exp(const T &v1, const T &v2, const T &v3) {
   }
 }
 
-/* Logrithm of a Rotation Matrix */
+/* Logarithm of a Rotation Matrix */
 template<typename T>
 Eigen::Matrix<T, 3, 1> Log(const Eigen::Matrix<T, 3, 3> &R) {
   T theta = (R.trace() > 3.0 - 1e-6) ? 0.0 : std::acos(0.5 * (R.trace() - 1));

@@ -171,8 +171,8 @@ public:
   void S2_hat(Eigen::Matrix<scalar, 3, 3> &res) {
     Eigen::Matrix<scalar, 3, 3> skew_vec;
     skew_vec << scalar(0), -vec[2], vec[1],
-      vec[2], scalar(0), -vec[0],
-      -vec[1], vec[0], scalar(0);
+        vec[2], scalar(0), -vec[0],
+        -vec[1], vec[0], scalar(0);
     res = skew_vec;
   }
 
@@ -182,8 +182,8 @@ public:
       if (vec[2] + length > tolerance<scalar>()) {
 
         res << length - vec[0] * vec[0] / (length + vec[2]), -vec[0] * vec[1] / (length + vec[2]),
-          -vec[0] * vec[1] / (length + vec[2]), length - vec[1] * vec[1] / (length + vec[2]),
-          -vec[0], -vec[1];
+            -vec[0] * vec[1] / (length + vec[2]), length - vec[1] * vec[1] / (length + vec[2]),
+            -vec[0], -vec[1];
         res /= length;
       }
       else {
@@ -196,8 +196,8 @@ public:
       if (vec[1] + length > tolerance<scalar>()) {
 
         res << length - vec[0] * vec[0] / (length + vec[1]), -vec[0] * vec[2] / (length + vec[1]),
-          -vec[0], -vec[2],
-          -vec[0] * vec[2] / (length + vec[1]), length - vec[2] * vec[2] / (length + vec[1]);
+            -vec[0], -vec[2],
+            -vec[0] * vec[2] / (length + vec[1]), length - vec[2] * vec[2] / (length + vec[1]);
         res /= length;
       }
       else {
@@ -210,8 +210,8 @@ public:
       if (vec[0] + length > tolerance<scalar>()) {
 
         res << -vec[1], -vec[2],
-          length - vec[1] * vec[1] / (length + vec[0]), -vec[2] * vec[1] / (length + vec[0]),
-          -vec[2] * vec[1] / (length + vec[0]), length - vec[2] * vec[2] / (length + vec[0]);
+            length - vec[1] * vec[1] / (length + vec[0]), -vec[2] * vec[1] / (length + vec[0]),
+            -vec[2] * vec[1] / (length + vec[0]), length - vec[2] * vec[2] / (length + vec[0]);
         res /= length;
       }
       else {

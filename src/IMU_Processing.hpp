@@ -8,7 +8,6 @@
 #include <ros/ros.h>
 #include <so3_math.h>
 #include <Eigen/Eigen>
-#include <common_lib.h>
 #include <pcl/common/io.h>
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
@@ -22,9 +21,10 @@
 #include <sensor_msgs/Imu.h>
 #include <sensor_msgs/PointCloud2.h>
 #include <geometry_msgs/Vector3.h>
-#include "use-ikfom.hpp"
 
-/// *************Preconfiguration
+#include "use-ikfom.hpp"
+#include "../include/common_lib.h"
+/// ************* Preconfiguration
 
 #define MAX_INI_COUNT (10)
 
@@ -43,10 +43,10 @@ public:
   ~ImuProcess();
 
   void Reset();
-  void Reset(double start_timestamp, const sensor_msgs::ImuConstPtr &lastimu);
+  // void Reset(double start_timestamp, const sensor_msgs::ImuConstPtr &lastimu);
   void set_extrinsic(const V3D &transl, const M3D &rot);
   void set_extrinsic(const V3D &transl);
-  void set_extrinsic(const MD(4,4) &T);
+  void set_extrinsic(const MD(4, 4) &T);
   void set_gyr_cov(const V3D &scaler);
   void set_acc_cov(const V3D &scaler);
   void set_gyr_bias_cov(const V3D &b_g);
@@ -69,9 +69,9 @@ private:
 
   PointCloudXYZI::Ptr cur_pcl_un_;
   sensor_msgs::ImuConstPtr last_imu_;
-  deque <sensor_msgs::ImuConstPtr> v_imu_;
-  vector <Pose6D> IMUpose;
-  vector <M3D> v_rot_pcl_;
+  deque<sensor_msgs::ImuConstPtr> v_imu_;
+  vector<Pose6D> IMUpose;
+  vector<M3D> v_rot_pcl_;
   M3D Lidar_R_wrt_IMU;
   V3D Lidar_T_wrt_IMU;
   V3D mean_acc;
@@ -86,8 +86,7 @@ private:
 };
 
 
-ImuProcess::ImuProcess()
-  : b_first_frame_(true), imu_need_init_(true), start_timestamp_(-1) {
+ImuProcess::ImuProcess() : b_first_frame_(true), imu_need_init_(true), start_timestamp_(-1) {
   init_iter_num = 1;
   Q = process_noise_cov();
   cov_acc = V3D(0.1, 0.1, 0.1);
@@ -119,11 +118,9 @@ void ImuProcess::Reset() {
   cur_pcl_un_.reset(new PointCloudXYZI());
 }
 
-void ImuProcess::set_extrinsic(const MD(
-4,4) &T)
-{
-Lidar_T_wrt_IMU = T.block<3, 1>(0, 3);
-Lidar_R_wrt_IMU = T.block<3, 3>(0, 0);
+void ImuProcess::set_extrinsic(const MD(4, 4) &T) {
+  Lidar_T_wrt_IMU = T.block<3, 1>(0, 3);
+  Lidar_R_wrt_IMU = T.block<3, 3>(0, 0);
 }
 
 void ImuProcess::set_extrinsic(const V3D &transl) {
@@ -240,11 +237,11 @@ void ImuProcess::UndistortPcl(const MeasureGroup &meas, esekfom::esekf<state_ikf
     if (tail->header.stamp.toSec() < last_lidar_end_time_) continue;
 
     angvel_avr << 0.5 * (head->angular_velocity.x + tail->angular_velocity.x),
-      0.5 * (head->angular_velocity.y + tail->angular_velocity.y),
-      0.5 * (head->angular_velocity.z + tail->angular_velocity.z);
+        0.5 * (head->angular_velocity.y + tail->angular_velocity.y),
+        0.5 * (head->angular_velocity.z + tail->angular_velocity.z);
     acc_avr << 0.5 * (head->linear_acceleration.x + tail->linear_acceleration.x),
-      0.5 * (head->linear_acceleration.y + tail->linear_acceleration.y),
-      0.5 * (head->linear_acceleration.z + tail->linear_acceleration.z);
+        0.5 * (head->linear_acceleration.y + tail->linear_acceleration.y),
+        0.5 * (head->linear_acceleration.z + tail->linear_acceleration.z);
 
     // fout_imu << setw(10) << head->header.stamp.toSec() - first_lidar_time << " " << angvel_avr.transpose() << " " << acc_avr.transpose() << endl;
 

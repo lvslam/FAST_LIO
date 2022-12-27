@@ -21,22 +21,22 @@ using namespace Eigen;
 #define DIM_STATE (18)        // Dimension of states (Let Dim(SO(3)) = 3)
 #define DIM_PROC_N (12)       // Dimension of process noise (Let Dim(SO(3)) = 3)
 #define CUBE_LEN  (6.0)
-#define LIDAR_SP_LEN    (2)
-#define INIT_COV   (1)
+#define LIDAR_SP_LEN (2)
+#define INIT_COV (1)
 #define NUM_MATCH_POINTS    (5)
 #define MAX_MEAS_DIM        (10000)
 
 #define VEC_FROM_ARRAY(v)        v[0],v[1],v[2]
 #define MAT_FROM_ARRAY(v)        v[0],v[1],v[2],v[3],v[4],v[5],v[6],v[7],v[8]
-#define CONSTRAIN(v, min, max)     ((v>min)?((v<max)?v:max):min)
+#define CONSTRAIN(v, min, max)   ((v>min)?((v<max)?v:max):min)
 #define ARRAY_FROM_EIGEN(mat)    mat.data(), mat.data() + mat.rows() * mat.cols()
 #define STD_VEC_FROM_EIGEN(mat)  vector<decltype(mat)::Scalar> (mat.data(), mat.data() + mat.rows() * mat.cols())
 #define DEBUG_FILE_DIR(name)     (string(string(ROOT_DIR) + "Log/"+ name))
 
 typedef fast_lio::Pose6D Pose6D;
 typedef pcl::PointXYZINormal PointType;
-typedef pcl::PointCloud <PointType> PointCloudXYZI;
-typedef vector <PointType, Eigen::aligned_allocator<PointType>> PointVector;
+typedef pcl::PointCloud<PointType> PointCloudXYZI;
+typedef vector<PointType, Eigen::aligned_allocator<PointType>> PointVector;
 typedef Vector3d V3D;
 typedef Matrix3d M3D;
 typedef Vector3f V3F;
@@ -62,7 +62,7 @@ struct MeasureGroup     // Lidar data and imu dates for the curent process
   double lidar_beg_time;
   double lidar_end_time;
   PointCloudXYZI::Ptr lidar;
-  deque <sensor_msgs::Imu::ConstPtr> imu;
+  deque<sensor_msgs::Imu::ConstPtr> imu;
 };
 
 

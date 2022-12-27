@@ -114,7 +114,7 @@ struct vect : public Eigen::Matrix<_scalar, D, 1, _Options>
 
   /** Constructor copying the value of the expression \a other */
   template<typename OtherDerived>
-  EIGEN_STRONG_INLINE vect(const Eigen::DenseBase <OtherDerived> &other) : base(other) {
+  EIGEN_STRONG_INLINE vect(const Eigen::DenseBase<OtherDerived> &other) : base(other) {
   }
 
   /** Construct from memory. */
@@ -177,7 +177,7 @@ struct vect : public Eigen::Matrix<_scalar, D, 1, _Options>
     }
     if (D == Eigen::Dynamic) {
       assert(term != 0 && "Dynamic vectors must be embraced");
-      std::vector <scalar> temp;
+      std::vector<scalar> temp;
       while (is.good() && is.peek() != term) {
         scalar x;
         is >> x;
@@ -238,7 +238,7 @@ struct vect : public Eigen::Matrix<_scalar, D, 1, _Options>
 template<int M, int N, class _scalar = double, int _Options = Eigen::Matrix<_scalar, M, N>::Options>
 struct matrix : public Eigen::Matrix<_scalar, M, N, _Options>
 {
-  typedef Eigen::Matrix <_scalar, M, N, _Options> base;
+  typedef Eigen::Matrix<_scalar, M, N, _Options> base;
   enum
   {
     DOF = M * N, TYP = 4, DIM = 0
@@ -254,7 +254,7 @@ struct matrix : public Eigen::Matrix<_scalar, M, N, _Options>
 
   /** Constructor copying the value of the expression \a other */
   template<typename OtherDerived>
-  EIGEN_STRONG_INLINE matrix(const Eigen::MatrixBase <OtherDerived> &other) : base(other) {
+  EIGEN_STRONG_INLINE matrix(const Eigen::MatrixBase<OtherDerived> &other) : base(other) {
   }
 
   /** Construct from memory. */
@@ -441,7 +441,7 @@ struct Complex : public std::complex<_scalar>
   };
   typedef _scalar scalar;
 
-  typedef std::complex <scalar> Base;
+  typedef std::complex<scalar> Base;
 
   Complex(const Base &value) : Base(value) {
   }
@@ -453,7 +453,7 @@ struct Complex : public std::complex<_scalar>
   }
 
   template<class Derived>
-  Complex(const Eigen::DenseBase <Derived> &in) : Base(in[0], in[1]) {
+  Complex(const Eigen::DenseBase<Derived> &in) : Base(in[0], in[1]) {
   }
 
   void boxplus(MTK::vectview<const scalar, DOF> vec, scalar scale = 1) {

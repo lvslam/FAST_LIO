@@ -95,14 +95,14 @@ bool point_selected_surf[100000] = {0};
 bool lidar_pushed, flg_first_scan = true, flg_exit = false, flg_EKF_inited;
 bool scan_pub_en = false, dense_pub_en = false, scan_body_pub_en = false;
 
-vector <vector<int>> pointSearchInd_surf;
-vector <BoxPointType> cub_needrm;
-vector <PointVector> Nearest_Points;
+vector<vector<int>> pointSearchInd_surf;
+vector<BoxPointType> cub_needrm;
+vector<PointVector> Nearest_Points;
 vector<double> extrinT(3, 0.0);
 vector<double> extrinR(9, 0.0);
 deque<double> time_buffer;
-deque <PointCloudXYZI::Ptr> lidar_buffer;
-deque <sensor_msgs::Imu::ConstPtr> imu_buffer;
+deque<PointCloudXYZI::Ptr> lidar_buffer;
+deque<sensor_msgs::Imu::ConstPtr> imu_buffer;
 
 PointCloudXYZI::Ptr featsFromMap(new PointCloudXYZI());
 PointCloudXYZI::Ptr feats_undistort(new PointCloudXYZI());
@@ -113,10 +113,10 @@ PointCloudXYZI::Ptr laserCloudOri(new PointCloudXYZI(100000, 1));
 PointCloudXYZI::Ptr corr_normvect(new PointCloudXYZI(100000, 1));
 PointCloudXYZI::Ptr _featsArray;
 
-pcl::VoxelGrid <PointType> downSizeFilterSurf;
-pcl::VoxelGrid <PointType> downSizeFilterMap;
+pcl::VoxelGrid<PointType> downSizeFilterSurf;
+pcl::VoxelGrid<PointType> downSizeFilterMap;
 
-KD_TREE <PointType> ikdtree;
+KD_TREE<PointType> ikdtree;
 
 V3F XAxisPoint_body(LIDAR_SP_LEN, 0.0, 0.0);
 V3F XAxisPoint_world(LIDAR_SP_LEN, 0.0, 0.0);
@@ -136,8 +136,8 @@ nav_msgs::Odometry odomAftMapped;
 geometry_msgs::Quaternion geoQuat;
 geometry_msgs::PoseStamped msg_body_pose;
 
-shared_ptr <Preprocess> p_pre(new Preprocess());
-shared_ptr <ImuProcess> p_imu(new ImuProcess());
+shared_ptr<Preprocess> p_pre(new Preprocess());
+shared_ptr<ImuProcess> p_imu(new ImuProcess());
 
 void SigHandle(int sig) {
   flg_exit = true;
@@ -628,7 +628,7 @@ void h_share_model(state_ikfom &s, esekfom::dyn_share_datastruct<double> &ekfom_
     if (!point_selected_surf[i]) continue;
 
     VF(4)
-    pabcd;
+        pabcd;
     point_selected_surf[i] = false;
     if (esti_plane(pabcd, points_near, 0.1f)) {
       float pd2 = pabcd(0) * point_world.x + pabcd(1) * point_world.y + pabcd(2) * point_world.z + pabcd(3);
@@ -735,8 +735,8 @@ int main(int argc, char **argv) {
   nh.param<bool>("mapping/extrinsic_est_en", extrinsic_est_en, true);
   nh.param<bool>("pcd_save/pcd_save_en", pcd_save_en, false);
   nh.param<int>("pcd_save/interval", pcd_save_interval, -1);
-  nh.param < vector < double >> ("mapping/extrinsic_T", extrinT, vector<double>());
-  nh.param < vector < double >> ("mapping/extrinsic_R", extrinR, vector<double>());
+  nh.param<vector<double >>("mapping/extrinsic_T", extrinT, vector<double>());
+  nh.param<vector<double >>("mapping/extrinsic_R", extrinR, vector<double>());
   cout << "p_pre->lidar_type " << p_pre->lidar_type << endl;
 
   path.header.stamp = ros::Time::now();

@@ -102,7 +102,7 @@ struct traits
     DOF = Manifold::DOF
   };
   typedef vect<DOF, scalar> vectorized_type;
-  typedef Eigen::Matrix <scalar, DOF, DOF> matrix_type;
+  typedef Eigen::Matrix<scalar, DOF, DOF> matrix_type;
 };
 
 template<>
@@ -156,7 +156,7 @@ inline scalar normalize(scalar x, scalar bound) { //not used
  * @return a pair containing cos and sinc of sqrt(x2)
  */
 template<class scalar>
-std::pair <scalar, scalar> cos_sinc_sqrt(const scalar &x2) {
+std::pair<scalar, scalar> cos_sinc_sqrt(const scalar &x2) {
   using std::sqrt;
   using std::cos;
   using std::sin;
@@ -193,8 +193,8 @@ template<typename Base>
 Eigen::Matrix<typename Base::scalar, 3, 3> hat(const Base &v) {
   Eigen::Matrix<typename Base::scalar, 3, 3> res;
   res << 0, -v[2], v[1],
-    v[2], 0, -v[0],
-    -v[1], v[0], 0;
+      v[2], 0, -v[0],
+      -v[1], v[0], 0;
   return res;
 }
 
@@ -240,7 +240,7 @@ Eigen::Matrix<scalar, 2, 3> S2_w_expw_(Eigen::Matrix<scalar, 2, 1> v, scalar len
   }
   else {
     res << -v[0] * (1 / norm - 1 / std::tan(norm)) / std::sin(norm), norm / std::sin(norm), 0,
-      -v[1] * (1 / norm - 1 / std::tan(norm)) / std::sin(norm), 0, norm / std::sin(norm);
+        -v[1] * (1 / norm - 1 / std::tan(norm)) / std::sin(norm), 0, norm / std::sin(norm);
     res /= length;
   }
 }
@@ -263,7 +263,7 @@ Eigen::Matrix<typename Base::scalar, 3, 3> A_matrix(const Base &v) {
 template<class scalar, int n>
 scalar exp(vectview<scalar, n> result, vectview<const scalar, n> vec, const scalar &scale = 1) {
   scalar norm2 = vec.squaredNorm();
-  std::pair <scalar, scalar> cos_sinc = cos_sinc_sqrt(scale * scale * norm2);
+  std::pair<scalar, scalar> cos_sinc = cos_sinc_sqrt(scale * scale * norm2);
   scalar mult = cos_sinc.second * scale;
   result = mult * vec;
   return cos_sinc.first;

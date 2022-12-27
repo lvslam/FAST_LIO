@@ -59,28 +59,28 @@ namespace internal {
 template<class Base, class T1, class T2>
 struct CovBlock
 {
-  typedef typename Eigen::Block<Eigen::Matrix < typename Base::scalar, Base::DOF, Base::DOF>, T1::DOF, T2::DOF> Type;
+  typedef typename Eigen::Block<Eigen::Matrix<typename Base::scalar, Base::DOF, Base::DOF>, T1::DOF, T2::DOF> Type;
   typedef typename Eigen::Block<const Eigen::Matrix<typename Base::scalar, Base::DOF, Base::DOF>, T1::DOF, T2::DOF> ConstType;
 };
 
 template<class Base, class T1, class T2>
 struct CovBlock_
 {
-  typedef typename Eigen::Block<Eigen::Matrix < typename Base::scalar, Base::DIM, Base::DIM>, T1::DIM, T2::DIM> Type;
+  typedef typename Eigen::Block<Eigen::Matrix<typename Base::scalar, Base::DIM, Base::DIM>, T1::DIM, T2::DIM> Type;
   typedef typename Eigen::Block<const Eigen::Matrix<typename Base::scalar, Base::DIM, Base::DIM>, T1::DIM, T2::DIM> ConstType;
 };
 
 template<typename Base1, typename Base2, typename T1, typename T2>
 struct CrossCovBlock
 {
-  typedef typename Eigen::Block<Eigen::Matrix < typename Base1::scalar, Base1::DOF, Base2::DOF>, T1::DOF, T2::DOF> Type;
+  typedef typename Eigen::Block<Eigen::Matrix<typename Base1::scalar, Base1::DOF, Base2::DOF>, T1::DOF, T2::DOF> Type;
   typedef typename Eigen::Block<const Eigen::Matrix<typename Base1::scalar, Base1::DOF, Base2::DOF>, T1::DOF, T2::DOF> ConstType;
 };
 
 template<typename Base1, typename Base2, typename T1, typename T2>
 struct CrossCovBlock_
 {
-  typedef typename Eigen::Block<Eigen::Matrix < typename Base1::scalar, Base1::DIM, Base2::DIM>, T1::DIM, T2::DIM> Type;
+  typedef typename Eigen::Block<Eigen::Matrix<typename Base1::scalar, Base1::DIM, Base2::DIM>, T1::DIM, T2::DIM> Type;
   typedef typename Eigen::Block<const Eigen::Matrix<typename Base1::scalar, Base1::DIM, Base2::DIM>, T1::DIM, T2::DIM> ConstType;
 };
 
@@ -124,7 +124,7 @@ public:
 
   //! construct from Eigen::Block:
   template<class Base>
-  vectview(Eigen::VectorBlock <Base, dim> block) : base(&block.coeffRef(0), block.size()) {
+  vectview(Eigen::VectorBlock<Base, dim> block) : base(&block.coeffRef(0), block.size()) {
   }
 
   template<class Base, bool PacketAccess>
@@ -189,7 +189,7 @@ public:
    * @todo adapt this, when Block gets const-correct
    */
   template<class Base>
-  vectview(Eigen::VectorBlock <Base, dim> block) : base(&block.coeffRef(0)) {
+  vectview(Eigen::VectorBlock<Base, dim> block) : base(&block.coeffRef(0)) {
   }
 
   template<class Base, bool PacketAccess>

@@ -83,9 +83,9 @@ struct dyn_share_datastruct
   bool converge;
   Eigen::Matrix<T, Eigen::Dynamic, 1> z;
   Eigen::Matrix<T, Eigen::Dynamic, 1> h;
-  Eigen::Matrix <T, Eigen::Dynamic, Eigen::Dynamic> h_v;
-  Eigen::Matrix <T, Eigen::Dynamic, Eigen::Dynamic> h_x;
-  Eigen::Matrix <T, Eigen::Dynamic, Eigen::Dynamic> R;
+  Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> h_v;
+  Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> h_x;
+  Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> R;
 };
 
 //used for iterated error state EKF update
@@ -97,9 +97,9 @@ struct dyn_runtime_share_datastruct
   bool valid;
   bool converge;
   //Z z;
-  Eigen::Matrix <T, Eigen::Dynamic, Eigen::Dynamic> h_v;
-  Eigen::Matrix <T, Eigen::Dynamic, Eigen::Dynamic> h_x;
-  Eigen::Matrix <T, Eigen::Dynamic, Eigen::Dynamic> R;
+  Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> h_v;
+  Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> h_x;
+  Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> R;
 };
 
 
@@ -116,26 +116,26 @@ class esekf
 public:
 
   typedef typename state::scalar scalar_type;
-  typedef Matrix <scalar_type, n, n> cov;
-  typedef Matrix <scalar_type, m, n> cov_;
-  typedef SparseMatrix <scalar_type> spMt;
+  typedef Matrix<scalar_type, n, n> cov;
+  typedef Matrix<scalar_type, m, n> cov_;
+  typedef SparseMatrix<scalar_type> spMt;
   typedef Matrix<scalar_type, n, 1> vectorized_state;
   typedef Matrix<scalar_type, m, 1> flatted_state;
   typedef flatted_state processModel(state &, const input &);
-  typedef Eigen::Matrix <scalar_type, m, n> processMatrix1(state &, const input &);
-  typedef Eigen::Matrix <scalar_type, m, process_noise_dof> processMatrix2(state &, const input &);
-  typedef Eigen::Matrix <scalar_type, process_noise_dof, process_noise_dof> processnoisecovariance;
+  typedef Eigen::Matrix<scalar_type, m, n> processMatrix1(state &, const input &);
+  typedef Eigen::Matrix<scalar_type, m, process_noise_dof> processMatrix2(state &, const input &);
+  typedef Eigen::Matrix<scalar_type, process_noise_dof, process_noise_dof> processnoisecovariance;
   typedef measurement measurementModel(state &, bool &);
   typedef measurement measurementModel_share(state &, share_datastruct<state, measurement, measurement_noise_dof> &);
   typedef Eigen::Matrix<scalar_type, Eigen::Dynamic, 1> measurementModel_dyn(state &, bool &);
   //typedef Eigen::Matrix<scalar_type, Eigen::Dynamic, 1> measurementModel_dyn_share(state &,  dyn_share_datastruct<scalar_type> &);
   typedef void measurementModel_dyn_share(state &, dyn_share_datastruct<scalar_type> &);
-  typedef Eigen::Matrix <scalar_type, l, n> measurementMatrix1(state &, bool &);
-  typedef Eigen::Matrix <scalar_type, Eigen::Dynamic, n> measurementMatrix1_dyn(state &, bool &);
-  typedef Eigen::Matrix <scalar_type, l, measurement_noise_dof> measurementMatrix2(state &, bool &);
-  typedef Eigen::Matrix <scalar_type, Eigen::Dynamic, Eigen::Dynamic> measurementMatrix2_dyn(state &, bool &);
-  typedef Eigen::Matrix <scalar_type, measurement_noise_dof, measurement_noise_dof> measurementnoisecovariance;
-  typedef Eigen::Matrix <scalar_type, Eigen::Dynamic, Eigen::Dynamic> measurementnoisecovariance_dyn;
+  typedef Eigen::Matrix<scalar_type, l, n> measurementMatrix1(state &, bool &);
+  typedef Eigen::Matrix<scalar_type, Eigen::Dynamic, n> measurementMatrix1_dyn(state &, bool &);
+  typedef Eigen::Matrix<scalar_type, l, measurement_noise_dof> measurementMatrix2(state &, bool &);
+  typedef Eigen::Matrix<scalar_type, Eigen::Dynamic, Eigen::Dynamic> measurementMatrix2_dyn(state &, bool &);
+  typedef Eigen::Matrix<scalar_type, measurement_noise_dof, measurement_noise_dof> measurementnoisecovariance;
+  typedef Eigen::Matrix<scalar_type, Eigen::Dynamic, Eigen::Dynamic> measurementnoisecovariance_dyn;
 
   esekf(const state &x = state(),
         const cov &P = cov::Identity()) : x_(x), P_(P) {
@@ -277,14 +277,14 @@ public:
     cov_ f_x_ = f_x(x_, i_in);
     cov f_x_final;
 
-    Matrix <scalar_type, m, process_noise_dof> f_w_ = f_w(x_, i_in);
-    Matrix <scalar_type, n, process_noise_dof> f_w_final;
+    Matrix<scalar_type, m, process_noise_dof> f_w_ = f_w(x_, i_in);
+    Matrix<scalar_type, n, process_noise_dof> f_w_final;
     state x_before = x_;
     x_.oplus(f_, dt);
 
     F_x1 = cov::Identity();
-    for (std::vector < std::pair < std::pair < int, int >, int > > ::iterator it = x_.vect_state.begin(); it != x_.vect_state.end();
-    it++) {
+    for (std::vector<std::pair<std::pair<int, int>, int> >::iterator it = x_.vect_state.begin(); it != x_.vect_state.end();
+         it++) {
       int idx = (*it).first.first;
       int dim = (*it).first.second;
       int dof = (*it).second;
@@ -297,8 +297,8 @@ public:
     }
     Matrix<scalar_type, 3, 3> res_temp_SO3;
     MTK::vect<3, scalar_type> seg_SO3;
-    for (std::vector < std::pair < int, int > > ::iterator it = x_.SO3_state.begin(); it != x_.SO3_state.end();
-    it++) {
+    for (std::vector<std::pair<int, int> >::iterator it = x_.SO3_state.begin(); it != x_.SO3_state.end();
+         it++) {
       int idx = (*it).first;
       int dim = (*it).second;
       for (int i = 0; i < 3; i++) {
@@ -329,8 +329,8 @@ public:
     Matrix<scalar_type, 2, 3> res_temp_S2;
     Matrix<scalar_type, 2, 2> res_temp_S2_;
     MTK::vect<3, scalar_type> seg_S2;
-    for (std::vector < std::pair < int, int > > ::iterator it = x_.S2_state.begin(); it != x_.S2_state.end();
-    it++) {
+    for (std::vector<std::pair<int, int> >::iterator it = x_.S2_state.begin(); it != x_.S2_state.end();
+         it++) {
       int idx = (*it).first;
       int dim = (*it).second;
       for (int i = 0; i < 3; i++) {
@@ -401,8 +401,8 @@ public:
       spMt h_v_ = h_v(x_, valid).sparseView();
       spMt R_ = R.sparseView();
 #else
-      Matrix <scalar_type, l, n> h_x_ = h_x(x_, valid);
-      Matrix <scalar_type, l, Eigen::Dynamic> h_v_ = h_v(x_, valid);
+      Matrix<scalar_type, l, n> h_x_ = h_x(x_, valid);
+      Matrix<scalar_type, l, Eigen::Dynamic> h_v_ = h_v(x_, valid);
 #endif
       if (!valid) {
         continue;
@@ -412,8 +412,8 @@ public:
 
       Matrix<scalar_type, 3, 3> res_temp_SO3;
       MTK::vect<3, scalar_type> seg_SO3;
-      for (std::vector < std::pair < int, int > > ::iterator it = x_.SO3_state.begin(); it != x_.SO3_state.end();
-      it++) {
+      for (std::vector<std::pair<int, int> >::iterator it = x_.SO3_state.begin(); it != x_.SO3_state.end();
+           it++) {
         int idx = (*it).first;
         int dim = (*it).second;
         for (int i = 0; i < 3; i++) {
@@ -433,8 +433,8 @@ public:
 
       Matrix<scalar_type, 2, 2> res_temp_S2;
       MTK::vect<2, scalar_type> seg_S2;
-      for (std::vector < std::pair < int, int > > ::iterator it = x_.S2_state.begin(); it != x_.S2_state.end();
-      it++) {
+      for (std::vector<std::pair<int, int> >::iterator it = x_.S2_state.begin(); it != x_.S2_state.end();
+           it++) {
         int idx = (*it).first;
         int dim = (*it).second;
         for (int i = 0; i < 2; i++) {
@@ -455,7 +455,7 @@ public:
         }
       }
 
-      Matrix <scalar_type, n, l> K_;
+      Matrix<scalar_type, n, l> K_;
       if (n > l) {
 #ifdef USE_sparse
         Matrix<scalar_type, l, l> K_temp = h_x_ * P_ * h_x_.transpose();
@@ -504,8 +504,8 @@ public:
 
         Matrix<scalar_type, 3, 3> res_temp_SO3;
         MTK::vect<3, scalar_type> seg_SO3;
-        for (typename std::vector<std::pair < int, int> > ::iterator it = x_.SO3_state.begin(); it != x_.SO3_state.end();
-        it++) {
+        for (typename std::vector<std::pair<int, int> >::iterator it = x_.SO3_state.begin(); it != x_.SO3_state.end();
+             it++) {
           int idx = (*it).first;
           for (int i = 0; i < 3; i++) {
             seg_SO3(i) = dx_(i + idx);
@@ -532,8 +532,8 @@ public:
 
         Matrix<scalar_type, 2, 2> res_temp_S2;
         MTK::vect<2, scalar_type> seg_S2;
-        for (typename std::vector<std::pair < int, int> > ::iterator it = x_.S2_state.begin(); it != x_.S2_state.end();
-        it++) {
+        for (typename std::vector<std::pair<int, int> >::iterator it = x_.S2_state.begin(); it != x_.S2_state.end();
+             it++) {
           int idx = (*it).first;
 
           for (int i = 0; i < 2; i++) {
@@ -603,8 +603,8 @@ public:
       spMt h_v_ = _share.h_v.sparseView();
       spMt R_ = _share.R.sparseView();
 #else
-      Matrix <scalar_type, l, n> h_x_ = _share.h_x;
-      Matrix <scalar_type, l, Eigen::Dynamic> h_v_ = _share.h_v;
+      Matrix<scalar_type, l, n> h_x_ = _share.h_x;
+      Matrix<scalar_type, l, Eigen::Dynamic> h_v_ = _share.h_v;
 #endif
       if (!_share.valid) {
         continue;
@@ -614,8 +614,8 @@ public:
 
       Matrix<scalar_type, 3, 3> res_temp_SO3;
       MTK::vect<3, scalar_type> seg_SO3;
-      for (std::vector < std::pair < int, int > > ::iterator it = x_.SO3_state.begin(); it != x_.SO3_state.end();
-      it++) {
+      for (std::vector<std::pair<int, int> >::iterator it = x_.SO3_state.begin(); it != x_.SO3_state.end();
+           it++) {
         int idx = (*it).first;
         int dim = (*it).second;
         for (int i = 0; i < 3; i++) {
@@ -635,8 +635,8 @@ public:
 
       Matrix<scalar_type, 2, 2> res_temp_S2;
       MTK::vect<2, scalar_type> seg_S2;
-      for (std::vector < std::pair < int, int > > ::iterator it = x_.S2_state.begin(); it != x_.S2_state.end();
-      it++) {
+      for (std::vector<std::pair<int, int> >::iterator it = x_.S2_state.begin(); it != x_.S2_state.end();
+           it++) {
         int idx = (*it).first;
         int dim = (*it).second;
         for (int i = 0; i < 2; i++) {
@@ -657,7 +657,7 @@ public:
         }
       }
 
-      Matrix <scalar_type, n, l> K_;
+      Matrix<scalar_type, n, l> K_;
       if (n > l) {
 #ifdef USE_sparse
         Matrix<scalar_type, l, l> K_temp = h_x_ * P_ * h_x_.transpose();
@@ -706,8 +706,8 @@ public:
 
         Matrix<scalar_type, 3, 3> res_temp_SO3;
         MTK::vect<3, scalar_type> seg_SO3;
-        for (typename std::vector<std::pair < int, int> > ::iterator it = x_.SO3_state.begin(); it != x_.SO3_state.end();
-        it++) {
+        for (typename std::vector<std::pair<int, int> >::iterator it = x_.SO3_state.begin(); it != x_.SO3_state.end();
+             it++) {
           int idx = (*it).first;
           for (int i = 0; i < 3; i++) {
             seg_SO3(i) = dx_(i + idx);
@@ -734,8 +734,8 @@ public:
 
         Matrix<scalar_type, 2, 2> res_temp_S2;
         MTK::vect<2, scalar_type> seg_S2;
-        for (typename std::vector<std::pair < int, int> > ::iterator it = x_.S2_state.begin(); it != x_.S2_state.end();
-        it++) {
+        for (typename std::vector<std::pair<int, int> >::iterator it = x_.S2_state.begin(); it != x_.S2_state.end();
+             it++) {
           int idx = (*it).first;
 
           for (int i = 0; i < 2; i++) {
@@ -794,8 +794,8 @@ public:
       spMt h_v_ = h_v_dyn(x_, valid).sparseView();
       spMt R_ = R.sparseView();
 #else
-      Matrix <scalar_type, Eigen::Dynamic, n> h_x_ = h_x_dyn(x_, valid);
-      Matrix <scalar_type, Eigen::Dynamic, Eigen::Dynamic> h_v_ = h_v_dyn(x_, valid);
+      Matrix<scalar_type, Eigen::Dynamic, n> h_x_ = h_x_dyn(x_, valid);
+      Matrix<scalar_type, Eigen::Dynamic, Eigen::Dynamic> h_v_ = h_v_dyn(x_, valid);
 #endif
       Matrix<scalar_type, Eigen::Dynamic, 1> h_ = h_dyn(x_, valid);
       dof_Measurement = h_.rows();
@@ -809,8 +809,8 @@ public:
       P_ = P_propagated;
       Matrix<scalar_type, 3, 3> res_temp_SO3;
       MTK::vect<3, scalar_type> seg_SO3;
-      for (std::vector < std::pair < int, int > > ::iterator it = x_.SO3_state.begin(); it != x_.SO3_state.end();
-      it++) {
+      for (std::vector<std::pair<int, int> >::iterator it = x_.SO3_state.begin(); it != x_.SO3_state.end();
+           it++) {
         int idx = (*it).first;
         int dim = (*it).second;
         for (int i = 0; i < 3; i++) {
@@ -829,8 +829,8 @@ public:
 
       Matrix<scalar_type, 2, 2> res_temp_S2;
       MTK::vect<2, scalar_type> seg_S2;
-      for (std::vector < std::pair < int, int > > ::iterator it = x_.S2_state.begin(); it != x_.S2_state.end();
-      it++) {
+      for (std::vector<std::pair<int, int> >::iterator it = x_.S2_state.begin(); it != x_.S2_state.end();
+           it++) {
         int idx = (*it).first;
         int dim = (*it).second;
         for (int i = 0; i < 2; i++) {
@@ -851,7 +851,7 @@ public:
         }
       }
 
-      Matrix <scalar_type, Eigen::Dynamic, Eigen::Dynamic> K_;
+      Matrix<scalar_type, Eigen::Dynamic, Eigen::Dynamic> K_;
       if (n > dof_Measurement) {
 #ifdef USE_sparse
         Matrix<scalar_type, Eigen::Dynamic, Eigen::Dynamic> K_temp = h_x_ * P_ * h_x_.transpose();
@@ -874,7 +874,7 @@ public:
         P_temp += K_temp;
         K_ = P_temp.inverse() * h_x_.transpose() * R_in;
 #else
-        Eigen::Matrix <scalar_type, Eigen::Dynamic, Eigen::Dynamic> R_in = (h_v_ * R * h_v_.transpose()).inverse();
+        Eigen::Matrix<scalar_type, Eigen::Dynamic, Eigen::Dynamic> R_in = (h_v_ * R * h_v_.transpose()).inverse();
         K_ = (h_x_.transpose() * R_in * h_x_ + P_.inverse()).inverse() * h_x_.transpose() * R_in;
 #endif
       }
@@ -896,8 +896,8 @@ public:
 
         Matrix<scalar_type, 3, 3> res_temp_SO3;
         MTK::vect<3, scalar_type> seg_SO3;
-        for (typename std::vector<std::pair < int, int> > ::iterator it = x_.SO3_state.begin(); it != x_.SO3_state.end();
-        it++) {
+        for (typename std::vector<std::pair<int, int> >::iterator it = x_.SO3_state.begin(); it != x_.SO3_state.end();
+             it++) {
           int idx = (*it).first;
           for (int i = 0; i < 3; i++) {
             seg_SO3(i) = dx_(i + idx);
@@ -924,8 +924,8 @@ public:
 
         Matrix<scalar_type, 2, 2> res_temp_S2;
         MTK::vect<2, scalar_type> seg_S2;
-        for (typename std::vector<std::pair < int, int> > ::iterator it = x_.S2_state.begin(); it != x_.S2_state.end();
-        it++) {
+        for (typename std::vector<std::pair<int, int> >::iterator it = x_.S2_state.begin(); it != x_.S2_state.end();
+             it++) {
           int idx = (*it).first;
 
           for (int i = 0; i < 2; i++) {
@@ -990,9 +990,9 @@ public:
       spMt h_v = dyn_share.h_v.sparseView();
       spMt R_ = dyn_share.R.sparseView();
 #else
-      Matrix <scalar_type, Eigen::Dynamic, Eigen::Dynamic> R = dyn_share.R;
-      Matrix <scalar_type, Eigen::Dynamic, Eigen::Dynamic> h_x = dyn_share.h_x;
-      Matrix <scalar_type, Eigen::Dynamic, Eigen::Dynamic> h_v = dyn_share.h_v;
+      Matrix<scalar_type, Eigen::Dynamic, Eigen::Dynamic> R = dyn_share.R;
+      Matrix<scalar_type, Eigen::Dynamic, Eigen::Dynamic> h_x = dyn_share.h_x;
+      Matrix<scalar_type, Eigen::Dynamic, Eigen::Dynamic> h_v = dyn_share.h_v;
 #endif
       dof_Measurement = h_x.rows();
       dof_Measurement_noise = dyn_share.R.rows();
@@ -1006,8 +1006,8 @@ public:
       P_ = P_propagated;
       Matrix<scalar_type, 3, 3> res_temp_SO3;
       MTK::vect<3, scalar_type> seg_SO3;
-      for (std::vector < std::pair < int, int > > ::iterator it = x_.SO3_state.begin(); it != x_.SO3_state.end();
-      it++) {
+      for (std::vector<std::pair<int, int> >::iterator it = x_.SO3_state.begin(); it != x_.SO3_state.end();
+           it++) {
         int idx = (*it).first;
         int dim = (*it).second;
         for (int i = 0; i < 3; i++) {
@@ -1026,8 +1026,8 @@ public:
 
       Matrix<scalar_type, 2, 2> res_temp_S2;
       MTK::vect<2, scalar_type> seg_S2;
-      for (std::vector < std::pair < int, int > > ::iterator it = x_.S2_state.begin(); it != x_.S2_state.end();
-      it++) {
+      for (std::vector<std::pair<int, int> >::iterator it = x_.S2_state.begin(); it != x_.S2_state.end();
+           it++) {
         int idx = (*it).first;
         int dim = (*it).second;
         for (int i = 0; i < 2; i++) {
@@ -1048,7 +1048,7 @@ public:
         }
       }
 
-      Matrix <scalar_type, Eigen::Dynamic, Eigen::Dynamic> K_;
+      Matrix<scalar_type, Eigen::Dynamic, Eigen::Dynamic> K_;
       if (n > dof_Measurement) {
 #ifdef USE_sparse
         Matrix<scalar_type, Eigen::Dynamic, Eigen::Dynamic> K_temp = h_x * P_ * h_x.transpose();
@@ -1071,7 +1071,7 @@ public:
         P_temp += K_temp;
         K_ = P_temp.inverse() * h_x.transpose() * R_in;
 #else
-        Eigen::Matrix <scalar_type, Eigen::Dynamic, Eigen::Dynamic> R_in = (h_v * R * h_v.transpose()).inverse();
+        Eigen::Matrix<scalar_type, Eigen::Dynamic, Eigen::Dynamic> R_in = (h_v * R * h_v.transpose()).inverse();
         K_ = (h_x.transpose() * R_in * h_x + P_.inverse()).inverse() * h_x.transpose() * R_in;
 #endif
       }
@@ -1094,8 +1094,8 @@ public:
 
         Matrix<scalar_type, 3, 3> res_temp_SO3;
         MTK::vect<3, scalar_type> seg_SO3;
-        for (typename std::vector<std::pair < int, int> > ::iterator it = x_.SO3_state.begin(); it != x_.SO3_state.end();
-        it++) {
+        for (typename std::vector<std::pair<int, int> >::iterator it = x_.SO3_state.begin(); it != x_.SO3_state.end();
+             it++) {
           int idx = (*it).first;
           for (int i = 0; i < 3; i++) {
             seg_SO3(i) = dx_(i + idx);
@@ -1122,8 +1122,8 @@ public:
 
         Matrix<scalar_type, 2, 2> res_temp_S2;
         MTK::vect<2, scalar_type> seg_S2;
-        for (typename std::vector<std::pair < int, int> > ::iterator it = x_.S2_state.begin(); it != x_.S2_state.end();
-        it++) {
+        for (typename std::vector<std::pair<int, int> >::iterator it = x_.S2_state.begin(); it != x_.S2_state.end();
+             it++) {
           int idx = (*it).first;
 
           for (int i = 0; i < 2; i++) {
@@ -1184,8 +1184,8 @@ public:
       spMt h_v_ = h_v_dyn(x_, valid).sparseView();
       spMt R_ = R.sparseView();
 #else
-      Matrix <scalar_type, Eigen::Dynamic, n> h_x_ = h_x_dyn(x_, valid);
-      Matrix <scalar_type, Eigen::Dynamic, Eigen::Dynamic> h_v_ = h_v_dyn(x_, valid);
+      Matrix<scalar_type, Eigen::Dynamic, n> h_x_ = h_x_dyn(x_, valid);
+      Matrix<scalar_type, Eigen::Dynamic, Eigen::Dynamic> h_v_ = h_v_dyn(x_, valid);
 #endif
       measurement_runtime h_ = h_runtime(x_, valid);
       dof_Measurement = measurement_runtime::DOF;
@@ -1200,8 +1200,8 @@ public:
       P_ = P_propagated;
       Matrix<scalar_type, 3, 3> res_temp_SO3;
       MTK::vect<3, scalar_type> seg_SO3;
-      for (std::vector < std::pair < int, int > > ::iterator it = x_.SO3_state.begin(); it != x_.SO3_state.end();
-      it++) {
+      for (std::vector<std::pair<int, int> >::iterator it = x_.SO3_state.begin(); it != x_.SO3_state.end();
+           it++) {
         int idx = (*it).first;
         int dim = (*it).second;
         for (int i = 0; i < 3; i++) {
@@ -1220,8 +1220,8 @@ public:
 
       Matrix<scalar_type, 2, 2> res_temp_S2;
       MTK::vect<2, scalar_type> seg_S2;
-      for (std::vector < std::pair < int, int > > ::iterator it = x_.S2_state.begin(); it != x_.S2_state.end();
-      it++) {
+      for (std::vector<std::pair<int, int> >::iterator it = x_.S2_state.begin(); it != x_.S2_state.end();
+           it++) {
         int idx = (*it).first;
         int dim = (*it).second;
         for (int i = 0; i < 2; i++) {
@@ -1242,7 +1242,7 @@ public:
         }
       }
 
-      Matrix <scalar_type, Eigen::Dynamic, Eigen::Dynamic> K_;
+      Matrix<scalar_type, Eigen::Dynamic, Eigen::Dynamic> K_;
       if (n > dof_Measurement) {
 #ifdef USE_sparse
         Matrix<scalar_type, Eigen::Dynamic, Eigen::Dynamic> K_temp = h_x_ * P_ * h_x_.transpose();
@@ -1265,7 +1265,7 @@ public:
         P_temp += K_temp;
         K_ = P_temp.inverse() * h_x_.transpose() * R_in;
 #else
-        Eigen::Matrix <scalar_type, Eigen::Dynamic, Eigen::Dynamic> R_in = (h_v_ * R * h_v_.transpose()).inverse();
+        Eigen::Matrix<scalar_type, Eigen::Dynamic, Eigen::Dynamic> R_in = (h_v_ * R * h_v_.transpose()).inverse();
         K_ = (h_x_.transpose() * R_in * h_x_ + P_.inverse()).inverse() * h_x_.transpose() * R_in;
 #endif
       }
@@ -1289,8 +1289,8 @@ public:
 
         Matrix<scalar_type, 3, 3> res_temp_SO3;
         MTK::vect<3, scalar_type> seg_SO3;
-        for (typename std::vector<std::pair < int, int> > ::iterator it = x_.SO3_state.begin(); it != x_.SO3_state.end();
-        it++) {
+        for (typename std::vector<std::pair<int, int> >::iterator it = x_.SO3_state.begin(); it != x_.SO3_state.end();
+             it++) {
           int idx = (*it).first;
           for (int i = 0; i < 3; i++) {
             seg_SO3(i) = dx_(i + idx);
@@ -1317,8 +1317,8 @@ public:
 
         Matrix<scalar_type, 2, 2> res_temp_S2;
         MTK::vect<2, scalar_type> seg_S2;
-        for (typename std::vector<std::pair < int, int> > ::iterator it = x_.S2_state.begin(); it != x_.S2_state.end();
-        it++) {
+        for (typename std::vector<std::pair<int, int> >::iterator it = x_.S2_state.begin(); it != x_.S2_state.end();
+             it++) {
           int idx = (*it).first;
 
           for (int i = 0; i < 2; i++) {
@@ -1383,9 +1383,9 @@ public:
       spMt h_v = dyn_share.h_v.sparseView();
       spMt R_ = dyn_share.R.sparseView();
 #else
-      Matrix <scalar_type, Eigen::Dynamic, Eigen::Dynamic> R = dyn_share.R;
-      Matrix <scalar_type, Eigen::Dynamic, Eigen::Dynamic> h_x = dyn_share.h_x;
-      Matrix <scalar_type, Eigen::Dynamic, Eigen::Dynamic> h_v = dyn_share.h_v;
+      Matrix<scalar_type, Eigen::Dynamic, Eigen::Dynamic> R = dyn_share.R;
+      Matrix<scalar_type, Eigen::Dynamic, Eigen::Dynamic> h_x = dyn_share.h_x;
+      Matrix<scalar_type, Eigen::Dynamic, Eigen::Dynamic> h_v = dyn_share.h_v;
 #endif
       dof_Measurement = measurement_runtime::DOF;
       dof_Measurement_noise = dyn_share.R.rows();
@@ -1399,8 +1399,8 @@ public:
       P_ = P_propagated;
       Matrix<scalar_type, 3, 3> res_temp_SO3;
       MTK::vect<3, scalar_type> seg_SO3;
-      for (std::vector < std::pair < int, int > > ::iterator it = x_.SO3_state.begin(); it != x_.SO3_state.end();
-      it++) {
+      for (std::vector<std::pair<int, int> >::iterator it = x_.SO3_state.begin(); it != x_.SO3_state.end();
+           it++) {
         int idx = (*it).first;
         int dim = (*it).second;
         for (int i = 0; i < 3; i++) {
@@ -1419,8 +1419,8 @@ public:
 
       Matrix<scalar_type, 2, 2> res_temp_S2;
       MTK::vect<2, scalar_type> seg_S2;
-      for (std::vector < std::pair < int, int > > ::iterator it = x_.S2_state.begin(); it != x_.S2_state.end();
-      it++) {
+      for (std::vector<std::pair<int, int> >::iterator it = x_.S2_state.begin(); it != x_.S2_state.end();
+           it++) {
         int idx = (*it).first;
         int dim = (*it).second;
         for (int i = 0; i < 2; i++) {
@@ -1441,7 +1441,7 @@ public:
         }
       }
 
-      Matrix <scalar_type, Eigen::Dynamic, Eigen::Dynamic> K_;
+      Matrix<scalar_type, Eigen::Dynamic, Eigen::Dynamic> K_;
       if (n > dof_Measurement) {
 #ifdef USE_sparse
         Matrix<scalar_type, Eigen::Dynamic, Eigen::Dynamic> K_temp = h_x * P_ * h_x.transpose();
@@ -1464,7 +1464,7 @@ public:
         P_temp += K_temp;
         K_ = P_temp.inverse() * h_x.transpose() * R_in;
 #else
-        Eigen::Matrix <scalar_type, Eigen::Dynamic, Eigen::Dynamic> R_in = (h_v * R * h_v.transpose()).inverse();
+        Eigen::Matrix<scalar_type, Eigen::Dynamic, Eigen::Dynamic> R_in = (h_v * R * h_v.transpose()).inverse();
         K_ = (h_x.transpose() * R_in * h_x + P_.inverse()).inverse() * h_x.transpose() * R_in;
 #endif
       }
@@ -1488,8 +1488,8 @@ public:
 
         Matrix<scalar_type, 3, 3> res_temp_SO3;
         MTK::vect<3, scalar_type> seg_SO3;
-        for (typename std::vector<std::pair < int, int> > ::iterator it = x_.SO3_state.begin(); it != x_.SO3_state.end();
-        it++) {
+        for (typename std::vector<std::pair<int, int> >::iterator it = x_.SO3_state.begin(); it != x_.SO3_state.end();
+             it++) {
           int idx = (*it).first;
           for (int i = 0; i < 3; i++) {
             seg_SO3(i) = dx_(i + idx);
@@ -1516,8 +1516,8 @@ public:
 
         Matrix<scalar_type, 2, 2> res_temp_S2;
         MTK::vect<2, scalar_type> seg_S2;
-        for (typename std::vector<std::pair < int, int> > ::iterator it = x_.S2_state.begin(); it != x_.S2_state.end();
-        it++) {
+        for (typename std::vector<std::pair<int, int> >::iterator it = x_.S2_state.begin(); it != x_.S2_state.end();
+             it++) {
           int idx = (*it).first;
 
           for (int i = 0; i < 2; i++) {
@@ -1571,7 +1571,7 @@ public:
     int dof_Measurement;
 
     Matrix<scalar_type, n, 1> K_h;
-    Matrix <scalar_type, n, n> K_x;
+    Matrix<scalar_type, n, n> K_x;
 
     vectorized_state dx_new = vectorized_state::Zero();
     for (int i = -1; i < maximum_iter; i++) {
@@ -1600,8 +1600,8 @@ public:
 
       Matrix<scalar_type, 3, 3> res_temp_SO3;
       MTK::vect<3, scalar_type> seg_SO3;
-      for (std::vector < std::pair < int, int > > ::iterator it = x_.SO3_state.begin(); it != x_.SO3_state.end();
-      it++) {
+      for (std::vector<std::pair<int, int> >::iterator it = x_.SO3_state.begin(); it != x_.SO3_state.end();
+           it++) {
         int idx = (*it).first;
         int dim = (*it).second;
         for (int i = 0; i < 3; i++) {
@@ -1620,8 +1620,8 @@ public:
 
       Matrix<scalar_type, 2, 2> res_temp_S2;
       MTK::vect<2, scalar_type> seg_S2;
-      for (std::vector < std::pair < int, int > > ::iterator it = x_.S2_state.begin(); it != x_.S2_state.end();
-      it++) {
+      for (std::vector<std::pair<int, int> >::iterator it = x_.S2_state.begin(); it != x_.S2_state.end();
+           it++) {
         int idx = (*it).first;
         int dim = (*it).second;
         for (int i = 0; i < 2; i++) {
@@ -1661,8 +1661,8 @@ public:
         //Matrix<scalar_type, Eigen::Dynamic, Eigen::Dynamic> K_temp = h_x * P_ * h_x.transpose();
         //spMt R_temp = h_v * R_ * h_v.transpose();
         //K_temp += R_temp;
-        Eigen::Matrix <scalar_type, Eigen::Dynamic, Eigen::Dynamic> h_x_cur = Eigen::Matrix<scalar_type, Eigen::Dynamic, Eigen::Dynamic>::Zero(dof_Measurement,
-                                                                                                                                               n);
+        Eigen::Matrix<scalar_type, Eigen::Dynamic, Eigen::Dynamic> h_x_cur = Eigen::Matrix<scalar_type, Eigen::Dynamic, Eigen::Dynamic>::Zero(dof_Measurement,
+                                                                                                                                              n);
         h_x_cur.topLeftCorner(dof_Measurement, 12) = h_x_;
         /*
         h_x_cur.col(0) = h_x_.col(0);
@@ -1679,10 +1679,10 @@ public:
         h_x_cur.col(11) = h_x_.col(11);
         */
 
-        Matrix <scalar_type, Eigen::Dynamic, Eigen::Dynamic> K_ = P_ * h_x_cur.transpose() * (h_x_cur * P_ * h_x_cur.transpose() / R +
-                                                                                              Eigen::Matrix<double, Dynamic, Dynamic>::Identity(dof_Measurement,
-                                                                                                                                                dof_Measurement)).inverse() /
-                                                                  R;
+        Matrix<scalar_type, Eigen::Dynamic, Eigen::Dynamic> K_ = P_ * h_x_cur.transpose() * (h_x_cur * P_ * h_x_cur.transpose() / R +
+                                                                                             Eigen::Matrix<double, Dynamic, Dynamic>::Identity(dof_Measurement,
+                                                                                                                                               dof_Measurement)).inverse() /
+                                                                 R;
         K_h = K_ * dyn_share.h;
         K_x = K_ * h_x_cur;
         //#else
@@ -1779,8 +1779,8 @@ public:
         //std::cout << "iteration time" << t << "," << i << std::endl; 
         Matrix<scalar_type, 3, 3> res_temp_SO3;
         MTK::vect<3, scalar_type> seg_SO3;
-        for (typename std::vector<std::pair < int, int> > ::iterator it = x_.SO3_state.begin(); it != x_.SO3_state.end();
-        it++) {
+        for (typename std::vector<std::pair<int, int> >::iterator it = x_.SO3_state.begin(); it != x_.SO3_state.end();
+             it++) {
           int idx = (*it).first;
           for (int i = 0; i < 3; i++) {
             seg_SO3(i) = dx_(i + idx);
@@ -1809,8 +1809,8 @@ public:
 
         Matrix<scalar_type, 2, 2> res_temp_S2;
         MTK::vect<2, scalar_type> seg_S2;
-        for (typename std::vector<std::pair < int, int> > ::iterator it = x_.S2_state.begin(); it != x_.S2_state.end();
-        it++) {
+        for (typename std::vector<std::pair<int, int> >::iterator it = x_.S2_state.begin(); it != x_.S2_state.end();
+             it++) {
           int idx = (*it).first;
 
           for (int i = 0; i < 2; i++) {

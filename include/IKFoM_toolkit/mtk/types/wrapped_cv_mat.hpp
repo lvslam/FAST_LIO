@@ -87,12 +87,12 @@ public:
   }
 
   template<class Derived>
-  cv_mat(const Eigen::MatrixBase <Derived> &value) : base_type(value) {
+  cv_mat(const Eigen::MatrixBase<Derived> &value) : base_type(value) {
     cv_mat_ = cvMat(rows, cols, type_, base_type::data());
   }
 
   template<class Derived>
-  cv_mat &operator=(const Eigen::MatrixBase <Derived> &value) {
+  cv_mat &operator=(const Eigen::MatrixBase<Derived> &value) {
     base_type::operator=(value);
     return *this;
   }

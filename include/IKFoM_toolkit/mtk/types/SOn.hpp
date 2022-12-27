@@ -100,7 +100,7 @@ struct SO2 : public Eigen::Rotation2D<_scalar>
   };
 
   typedef _scalar scalar;
-  typedef Eigen::Rotation2D <scalar> base;
+  typedef Eigen::Rotation2D<scalar> base;
   typedef vect<DIM, scalar, Options> vect_type;
 
   //! Construct from angle
@@ -126,7 +126,7 @@ struct SO2 : public Eigen::Rotation2D<_scalar>
 
   //! Calculate @c this->inverse() * @c r
   template<class Derived>
-  vect_type operator%(const Eigen::MatrixBase <Derived> &vec) const {
+  vect_type operator%(const Eigen::MatrixBase<Derived> &vec) const {
     return base::inverse() * vec;
   }
 
@@ -189,29 +189,31 @@ struct SO3 : public Eigen::Quaternion<_scalar, Options>
     DOF = 3, DIM = 3, TYP = 2
   };
   typedef _scalar scalar;
-  typedef Eigen::Quaternion <scalar, Options> base;
-  typedef Eigen::Quaternion <scalar> Quaternion;
+  typedef Eigen::Quaternion<scalar, Options> base;
+  typedef Eigen::Quaternion<scalar> Quaternion;
   typedef vect<DIM, scalar, Options> vect_type;
 
   //! Calculate @c this->inverse() * @c r
-  template<class OtherDerived> EIGEN_STRONG_INLINE
-    Quaternion
+  template<class OtherDerived>
+  EIGEN_STRONG_INLINE
+  Quaternion
 
-  operator%(const Eigen::QuaternionBase <OtherDerived> &r) const {
+  operator%(const Eigen::QuaternionBase<OtherDerived> &r) const {
     return base::conjugate() * r;
   }
 
   //! Calculate @c this->inverse() * @c r
   template<class Derived>
-  vect_type operator%(const Eigen::MatrixBase <Derived> &vec) const {
+  vect_type operator%(const Eigen::MatrixBase<Derived> &vec) const {
     return base::conjugate() * vec;
   }
 
   //! Calculate @c this * @c r.conjugate()
-  template<class OtherDerived> EIGEN_STRONG_INLINE
-    Quaternion
+  template<class OtherDerived>
+  EIGEN_STRONG_INLINE
+  Quaternion
 
-  operator/(const Eigen::QuaternionBase <OtherDerived> &r) const {
+  operator/(const Eigen::QuaternionBase<OtherDerived> &r) const {
     return *this * r.conjugate();
   }
 
@@ -235,7 +237,7 @@ struct SO3 : public Eigen::Quaternion<_scalar, Options>
    * @note Invalid rotation matrices may lead to spurious behavior.
    */
   template<class Derived>
-  SO3(const Eigen::MatrixBase <Derived> &matrix) : base(matrix) {
+  SO3(const Eigen::MatrixBase<Derived> &matrix) : base(matrix) {
   }
 
   /**
