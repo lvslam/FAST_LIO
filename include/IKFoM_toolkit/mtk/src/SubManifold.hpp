@@ -36,7 +36,7 @@
  *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
  */
- 
+
 /*
  *  Copyright (c) 2008--2011, Universitaet Bremen
  *  All rights reserved.
@@ -97,24 +97,28 @@ namespace MTK {
  * @tparam idx The index of the sub-type within the compound manifold
  */
 template<class T, int idx, int dim>
-struct SubManifold : public T 
+struct SubManifold : public T
 {
-	enum {IDX = idx, DIM = dim /*!< index of the sub-type within the compound manifold */ };
-	//! manifold type
-	typedef T type;
-	
-	//! Construct from derived type
-	template<class X>
-	explicit
-	SubManifold(const X& t) : T(t) {};
-	
-	//! Construct from internal type
-	//explicit
-	SubManifold(const T& t) : T(t) {};
-	
-	//! inherit assignment operator
-	using T::operator=;
-	
+  enum
+  {
+    IDX = idx, DIM = dim /*!< index of the sub-type within the compound manifold */ };
+  //! manifold type
+  typedef T type;
+
+  //! Construct from derived type
+  template<class X>
+  explicit
+  SubManifold(const X &t) : T(t) {
+  };
+
+  //! Construct from internal type
+  //explicit
+  SubManifold(const T &t) : T(t) {
+  };
+
+  //! inherit assignment operator
+  using T::operator=;
+
 };
 
 }  // namespace MTK
