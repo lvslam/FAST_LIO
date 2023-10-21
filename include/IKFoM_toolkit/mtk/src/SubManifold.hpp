@@ -99,25 +99,25 @@ namespace MTK {
 template<class T, int idx, int dim>
 struct SubManifold : public T
 {
-  enum
-  {
-    IDX = idx, DIM = dim /*!< index of the sub-type within the compound manifold */ };
-  //! manifold type
-  typedef T type;
+    enum
+    {
+        IDX = idx, DIM = dim /*!< index of the sub-type within the compound manifold */ };
+    //! manifold type
+    typedef T type;
 
-  //! Construct from derived type
-  template<class X>
-  explicit
-  SubManifold(const X &t) : T(t) {
-  };
+    //! Construct from derived type
+    template<class X>
+    explicit
+    SubManifold(const X &t) : T(t) {
+    };
 
-  //! Construct from internal type
-  //explicit
-  SubManifold(const T &t) : T(t) {
-  };
+    //! Construct from internal type
+    //explicit
+    SubManifold(const T &t) : T(t) {
+    };
 
-  //! inherit assignment operator
-  using T::operator=;
+    //! inherit assignment operator
+    using T::operator=;
 
 };
 
