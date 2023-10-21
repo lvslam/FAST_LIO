@@ -180,7 +180,7 @@ rosbag play YOUR_DOWNLOADED.bag
 
 ```
 
-### 4.2 Velodyne HDL-32E Rosbag
+### 4.2 _**Velodyne HDL-32E**_ Rosbag
 
 **NCLT Dataset**: Original bin file can be found [here](http://robots.engin.umich.edu/nclt/).
 
